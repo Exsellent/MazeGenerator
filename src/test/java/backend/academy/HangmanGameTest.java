@@ -44,7 +44,6 @@ class HangmanGameTest {
         verify(mockOutputWriter, never()).println(contains("Sorry, you've been hanged"));
     }
 
-
     @Test
     @Timeout(value = 10, unit = TimeUnit.SECONDS)
     void testGameScenarioLoss() throws IOException {
