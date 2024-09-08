@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>backend.academy</groupId>
@@ -22,7 +21,9 @@
         <pmd.version>3.16.0</pmd.version>
         <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
         <formatter-maven-plugin.version>2.23.0</formatter-maven-plugin.version>
+        <modernizer-maven-plugin.version>2.9.0</modernizer-maven-plugin.version>
     </properties>
+
 
     <dependencies>
         <!-- JUnit 5 for Testing -->
@@ -157,6 +158,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Modernizer Plugin -->
+            <plugin>
+                <groupId>org.gaul</groupId>
+                <artifactId>modernizer-maven-plugin</artifactId>
+                <version>${modernizer-maven-plugin.version}</version>
+                <configuration>
+                    <javaVersion>22</javaVersion>
+                    <failOnViolations>false</failOnViolations>
+                    <includeTestClasses>true</includeTestClasses>
+                    <exclusions>
+                        <!-- Добавьте исключения здесь -->
+                    </exclusions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>modernizer</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>modernizer</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 </project>
