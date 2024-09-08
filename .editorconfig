@@ -8,32 +8,6 @@ indent_style = space
 max_line_length = 120
 insert_final_newline = true
 trim_trailing_whitespace = true
-ij_continuation_indent_size = 4
-
-[{*.kt,*.kts}]
-ktlint_code_style = ktlint_official
-ktlint_standard = enabled
-ktlint_experimental = enabled
-
-ktlint_standard_multiline-expression-wrapping = disabled
-ktlint_standard_string-template-indent = disabled
-
-ktlint_function_signature_body_expression_wrapping = default
-ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 4
-ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 4
-ktlint_chain_method_rule_force_multiline_when_chain_operator_count_greater_or_equal_than = 5
-
-
-ij_kotlin_line_break_after_multiline_when_entry = false
-
-ij_kotlin_assignment_wrap = normal
-ij_kotlin_method_call_chain_wrap = normal
-ij_kotlin_extends_list_wrap = normal
-
-ij_kotlin_imports_layout = *
-ij_kotlin_packages_to_use_import_on_demand = unset
-ij_kotlin_name_count_to_use_star_import = 999
-ij_kotlin_name_count_to_use_star_import_for_members = 999
 
 [*.java]
 ij_java_imports_layout = *, $*

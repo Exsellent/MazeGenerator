@@ -1,6 +1,5 @@
 package backend.academy;
 
-
 import java.util.Random;
 
 public enum Category {

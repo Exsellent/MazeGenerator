@@ -5,5 +5,6 @@
     "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-    <suppress files="[\\/]backend[\\/]academy[\\/]samples" checks="."/>
+    <suppress files="[\\/]backend[\\/]academy[\\/]src[\\/]main[\\/]java[\\/]backend[\\/]academy" checks="."/>
 </suppressions>
+

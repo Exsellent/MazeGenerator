@@ -1,41 +1,41 @@
 package backend.academy;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
 @RequiredArgsConstructor
 public class HangmanGame {
-    private static final int MAX_ATTEMPTS = 6;  // Максимальное количество попыток
-    private static final int MAX_INPUT_ATTEMPTS = 10;  // Максимальное количество попыток ввода
-    private final WordBank wordBank;  // Источник слов
-    private final InputReader inputReader;  // Чтение пользовательского ввода
-    private final OutputWriter outputWriter;  // Вывод сообщений пользователю
-    private final HangmanDisplay display = new HangmanDisplay();  // Отображение виселицы
-    private String hint;  // Подсказка для текущего слова
+    private static final int MAX_ATTEMPTS = 6; // Максимальное количество попыток
+    private static final int MAX_INPUT_ATTEMPTS = 10; // Максимальное количество попыток ввода
+    private final WordBank wordBank; // Источник слов
+    private final InputReader inputReader; // Чтение пользовательского ввода
+    private final OutputWriter outputWriter; // Вывод сообщений пользователю
+    private final HangmanDisplay display = new HangmanDisplay(); // Отображение виселицы
+    private String hint; // Подсказка для текущего слова
 
     /**
      * Метод запуска игры: выбор категории, сложности и начало процесса игры.
      */
     public void startGame() {
         try {
-            Category category = selectCategory();  // Выбор категории
-            Difficulty difficulty = selectDifficulty();  // Выбор сложности
-            Map.Entry<String, String> wordAndHint = wordBank.selectWordAndHint(category, difficulty);  // Выбор слова и подсказки
-            String word = wordAndHint.getKey();  // Загаданное слово
-            this.hint = wordAndHint.getValue();  // Подсказка
+            Category category = selectCategory(); // Выбор категории
+            Difficulty difficulty = selectDifficulty(); // Выбор сложности
+            Map.Entry<String, String> wordAndHint = wordBank.selectWordAndHint(category, difficulty); // Выбор слова и
+                                                                                                      // подсказки
+            String word = wordAndHint.getKey(); // Загаданное слово
+            this.hint = wordAndHint.getValue(); // Подсказка
 
-            outputWriter.println("Hint: " + hint);  // Печать подсказки
-            playGame(word);  // Начало игры
+            outputWriter.println("Hint: " + hint); // Печать подсказки
+            playGame(word); // Начало игры
         } catch (IOException e) {
-            outputWriter.println("An error occurred: " + e.getMessage());  // Обработка ошибок
+            outputWriter.println("An error occurred: " + e.getMessage()); // Обработка ошибок
         }
     }
 
@@ -48,17 +48,17 @@ public class HangmanGame {
         outputWriter.println("2. Fruits");
         outputWriter.println("3. Countries");
 
-        String input = inputReader.readLine();  // Чтение ввода пользователя
+        String input = inputReader.readLine(); // Чтение ввода пользователя
         if (input.isEmpty()) {
-            return Category.getRandomCategory();  // Если ввод пустой, выбирается случайная категория
+            return Category.getRandomCategory(); // Если ввод пустой, выбирается случайная категория
         }
 
         int choice = Integer.parseInt(input);
         return switch (choice) {
-            case 1 -> Category.ANIMALS;
-            case 2 -> Category.FRUITS;
-            case 3 -> Category.COUNTRIES;
-            default -> Category.getRandomCategory();
+        case 1 -> Category.ANIMALS;
+        case 2 -> Category.FRUITS;
+        case 3 -> Category.COUNTRIES;
+        default -> Category.getRandomCategory();
         };
     }
 
@@ -71,17 +71,17 @@ public class HangmanGame {
         outputWriter.println("2. Medium");
         outputWriter.println("3. Hard");
 
-        String input = inputReader.readLine();  // Чтение ввода пользователя
+        String input = inputReader.readLine(); // Чтение ввода пользователя
         if (input.isEmpty()) {
-            return Difficulty.getRandomDifficulty();  // Если ввод пустой, выбирается случайный уровень
+            return Difficulty.getRandomDifficulty(); // Если ввод пустой, выбирается случайный уровень
         }
 
         int choice = Integer.parseInt(input);
         return switch (choice) {
-            case 1 -> Difficulty.EASY;
-            case 2 -> Difficulty.MEDIUM;
-            case 3 -> Difficulty.HARD;
-            default -> Difficulty.getRandomDifficulty();
+        case 1 -> Difficulty.EASY;
+        case 2 -> Difficulty.MEDIUM;
+        case 3 -> Difficulty.HARD;
+        default -> Difficulty.getRandomDifficulty();
         };
     }
 
@@ -89,16 +89,16 @@ public class HangmanGame {
      * Основной метод игры, который обрабатывает процесс угадывания слова.
      */
     private void playGame(String word) throws IOException {
-        int attempts = 0;  // Количество попыток
-        Set<Character> guessedLetters = new HashSet<>();  // Угаданные буквы
+        int attempts = 0; // Количество попыток
+        Set<Character> guessedLetters = new HashSet<>(); // Угаданные буквы
 
         outputWriter.println("The word has " + word.length() + " letters. You have " + MAX_ATTEMPTS + " attempts.");
 
         while (attempts < MAX_ATTEMPTS && !isWordGuessed(word, guessedLetters)) {
-            display.updateDisplay(word, guessedLetters, outputWriter);  // Обновление отображения слова
-            display.drawHangman(attempts, outputWriter);  // Рисование виселицы
+            display.updateDisplay(word, guessedLetters, outputWriter); // Обновление отображения слова
+            display.drawHangman(attempts, outputWriter); // Рисование виселицы
 
-            char guessedLetter = getValidLetter(guessedLetters);  // Получение валидной буквы
+            char guessedLetter = getValidLetter(guessedLetters); // Получение валидной буквы
 
             if (!word.contains(String.valueOf(guessedLetter))) {
                 attempts++;
@@ -106,7 +106,7 @@ public class HangmanGame {
             } else {
                 outputWriter.println("Correct guess!");
             }
-            guessedLetters.add(guessedLetter);  // Добавление буквы в список угаданных
+            guessedLetters.add(guessedLetter); // Добавление буквы в список угаданных
         }
 
         display.updateDisplay(word, guessedLetters, outputWriter);
@@ -142,7 +142,7 @@ public class HangmanGame {
             if (guessedLetters.contains(guessedLetter)) {
                 outputWriter.println("You've already guessed this letter. Try again.");
             } else {
-                return guessedLetter;  // Возврат валидной буквы
+                return guessedLetter; // Возврат валидной буквы
             }
             inputAttempts++;
         }
@@ -153,6 +153,6 @@ public class HangmanGame {
      * Проверка, угадано ли слово.
      */
     private boolean isWordGuessed(String word, Set<Character> guessedLetters) {
-        return word.chars().allMatch(c -> guessedLetters.contains((char) c));  // Проверка всех символов в слове
+        return word.chars().allMatch(c -> guessedLetters.contains((char) c)); // Проверка всех символов в слове
     }
 }

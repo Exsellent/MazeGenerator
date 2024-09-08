@@ -12,4 +12,3 @@ public class ConsoleInputReader implements InputReader {
         return reader.readLine();
     }
 }
-

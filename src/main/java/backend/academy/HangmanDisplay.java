@@ -13,15 +13,9 @@ public class HangmanDisplay {
     }
 
     public void drawHangman(int attempts, OutputWriter outputWriter) {
-        String[] hangmanParts = {
-            "\n\n\n\n\n",
-            "\n\n\n\n\n____",
-            "|\n|\n|\n|\n|____",
-            "_____\n|\n|\n|\n|\n|____",
-            "_____\n|   |\n|\n|\n|\n|____",
-            "_____\n|   |\n|   O\n|\n|\n|____",
-            "_____\n|   |\n|   O\n|  /|\\\n|  / \\\n|____"
-        };
+        String[] hangmanParts = { "\n\n\n\n\n", "\n\n\n\n\n____", "|\n|\n|\n|\n|____", "_____\n|\n|\n|\n|\n|____",
+                "_____\n|   |\n|\n|\n|\n|____", "_____\n|   |\n|   O\n|\n|\n|____",
+                "_____\n|   |\n|   O\n|  /|\\\n|  / \\\n|____" };
         outputWriter.println(hangmanParts[attempts]);
     }
 }
