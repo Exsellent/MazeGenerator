@@ -11,4 +11,9 @@ public class ConsoleInputReader implements InputReader {
     public String readLine() throws IOException {
         return reader.readLine();
     }
+
+    @Override
+    public char readChar() throws IOException {
+        return 0;
+    }
 }

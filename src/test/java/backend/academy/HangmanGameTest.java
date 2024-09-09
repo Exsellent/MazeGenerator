@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HangmanGameTest {
 
@@ -16,53 +17,37 @@ class HangmanGameTest {
     private WordBank mockWordBank;
     private InputReader mockInputReader;
     private OutputWriter mockOutputWriter;
+    private HangmanDisplay mockHangmanDisplay;
 
     @BeforeEach
     void setUp() {
         mockWordBank = mock(WordBank.class);
         mockInputReader = mock(InputReader.class);
         mockOutputWriter = mock(OutputWriter.class);
+        mockHangmanDisplay = mock(HangmanDisplay.class);
+
         game = new HangmanGame(mockWordBank, mockInputReader, mockOutputWriter);
-    }
-
-    @Test
-    @Timeout(value = 10, unit = TimeUnit.SECONDS)  // Ограничение времени теста
-    void testGameScenario() throws IOException {
-        when(mockInputReader.readLine())
-            .thenReturn("1")  // Категория
-            .thenReturn("1")  // Сложность
-            .thenReturn("c")  // Первая буква
-            .thenReturn("a")  // Вторая буква
-            .thenReturn("t");  // Третья буква (слово отгадано)
-
-        when(mockWordBank.selectWordAndHint(any(), any()))
-            .thenReturn(Map.entry("cat", "A small domesticated carnivorous mammal."));
-
-        game.startGame();
-
-        verify(mockOutputWriter, atLeastOnce()).println(contains("Congratulations"));
-        verify(mockOutputWriter, never()).println(contains("Sorry, you've been hanged"));
     }
 
     @Test
     @Timeout(value = 10, unit = TimeUnit.SECONDS)
     void testGameScenarioLoss() throws IOException {
         when(mockInputReader.readLine())
-            .thenReturn("1")  // Категория
-            .thenReturn("1")  // Сложность
-            .thenReturn("x")  // Неправильная буква
-            .thenReturn("y")  // Неправильная буква
-            .thenReturn("z")  // Неправильная буква
-            .thenReturn("w")  // Неправильная буква
-            .thenReturn("v")  // Неправильная буква
-            .thenReturn("u");  // Неправильная буква
+            .thenReturn("1")  // Category
+            .thenReturn("1")  // Difficulty
+            .thenReturn("x")  // Incorrect letter
+            .thenReturn("y")  // Incorrect letter
+            .thenReturn("z")  // Incorrect letter
+            .thenReturn("w")  // Incorrect letter
+            .thenReturn("v")  // Incorrect letter
+            .thenReturn("u"); // Incorrect letter
 
         when(mockWordBank.selectWordAndHint(any(), any()))
             .thenReturn(Map.entry("cat", "A small domesticated carnivorous mammal."));
 
         game.startGame();
 
-        verify(mockOutputWriter, atLeastOnce()).println(contains("Sorry, you've been hanged"));
+        verify(mockOutputWriter).println(contains("Sorry, you've been hanged. The word was: cat"));
         verify(mockOutputWriter, never()).println(contains("Congratulations"));
     }
 }

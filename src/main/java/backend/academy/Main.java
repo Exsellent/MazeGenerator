@@ -1,6 +1,10 @@
 package backend.academy;
 
-public class Main {
+public final class Main {
+    private Main() {
+        // Private constructor to prevent instantiation
+    }
+
     public static void main(String[] args) {
         InputReader inputReader = new ConsoleInputReader();
         OutputWriter outputWriter = new ConsoleOutputWriter();

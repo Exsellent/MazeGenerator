@@ -5,9 +5,9 @@ import java.util.Random;
 public enum Category {
     ANIMALS, FRUITS, COUNTRIES;
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random(); // Имя изменено на UPPER_CASE
 
     public static Category getRandomCategory() {
-        return values()[random.nextInt(values().length)];
+        return values()[RANDOM.nextInt(values().length)];
     }
 }
