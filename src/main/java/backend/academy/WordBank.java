@@ -73,7 +73,7 @@ public class WordBank {
     }
 
     public Entry<String, String> getRandomWordAndHint() {
-        // Example implementation: you should replace this with your actual logic
+
         return selectWordAndHint(Category.ANIMALS, Difficulty.EASY); // Replace with actual category and difficulty
     }
 }
