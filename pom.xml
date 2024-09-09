@@ -117,6 +117,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>${pmd.version}</version>
                 <configuration>
+                    <targetJdk>17</targetJdk> <!-- Установлен JDK 17 для PMD -->
                     <rulesets>
                         <ruleset>pmd-ruleset.xml</ruleset>
                     </rulesets>
@@ -191,7 +192,7 @@
                 <artifactId>modernizer-maven-plugin</artifactId>
                 <version>${modernizer-maven-plugin.version}</version>
                 <configuration>
-                    <javaVersion>17</javaVersion> <!-- Временно используйте JDK 17 для плагина Modernizer -->
+                    <javaVersion>17</javaVersion> <!-- Установлен JDK 17 для Modernizer -->
                     <failOnViolations>false</failOnViolations>
                     <includeTestClasses>true</includeTestClasses>
                 </configuration>
