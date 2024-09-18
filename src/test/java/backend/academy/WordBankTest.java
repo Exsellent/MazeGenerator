@@ -8,30 +8,30 @@ class WordBankTest {
     @Test
     void testSelectWord() {
         WordBank wordBank = new WordBank();
-        var wordAndHint = wordBank.selectWordAndHint(Category.ANIMALS, Difficulty.EASY);
-        assertNotNull(wordAndHint.getKey());
-        assertTrue(wordAndHint.getKey().length() > 0);
+        Word word = wordBank.selectWord(Category.ANIMALS, Difficulty.EASY);
+        assertNotNull(word.getWord()); // Corrected usage
+        assertTrue(word.getWord().length() > 0); // Corrected usage
     }
 
     @Test
     void testSelectWordDifferentCategories() {
         WordBank wordBank = new WordBank();
-        var animalWord = wordBank.selectWordAndHint(Category.ANIMALS, Difficulty.EASY);
-        var fruitWord = wordBank.selectWordAndHint(Category.FRUITS, Difficulty.EASY);
+        Word animalWord = wordBank.selectWord(Category.ANIMALS, Difficulty.EASY);
+        Word fruitWord = wordBank.selectWord(Category.FRUITS, Difficulty.EASY);
 
-        assertNotNull(animalWord.getKey());
-        assertNotNull(fruitWord.getKey());
-        assertNotEquals(animalWord.getKey(), fruitWord.getKey());
+        assertNotNull(animalWord.getWord()); // Corrected usage
+        assertNotNull(fruitWord.getWord()); // Corrected usage
+        assertNotEquals(animalWord.getWord(), fruitWord.getWord()); // Corrected usage
     }
 
     @Test
     void testSelectWordDifferentDifficulties() {
         WordBank wordBank = new WordBank();
-        var easyWord = wordBank.selectWordAndHint(Category.ANIMALS, Difficulty.EASY);
-        var hardWord = wordBank.selectWordAndHint(Category.ANIMALS, Difficulty.HARD);
+        Word easyWord = wordBank.selectWord(Category.ANIMALS, Difficulty.EASY);
+        Word hardWord = wordBank.selectWord(Category.ANIMALS, Difficulty.HARD);
 
-        assertNotNull(easyWord.getKey());
-        assertNotNull(hardWord.getKey());
-        assertNotEquals(easyWord.getKey(), hardWord.getKey());
+        assertNotNull(easyWord.getWord()); // Corrected usage
+        assertNotNull(hardWord.getWord()); // Corrected usage
+        assertNotEquals(easyWord.getWord(), hardWord.getWord()); // Corrected usage
     }
 }

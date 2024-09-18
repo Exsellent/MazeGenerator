@@ -1,4 +1,0 @@
-/*
- * Copyright (c) 2024 Your Company
- * Licensed under the Your License
- */

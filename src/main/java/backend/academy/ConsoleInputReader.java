@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ConsoleInputReader implements InputReader {
-    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader reader;
+
+    public ConsoleInputReader() {
+        reader = new BufferedReader(new InputStreamReader(System.in));
+    }
 
     @Override
     public String readLine() throws IOException {
@@ -14,6 +18,12 @@ public class ConsoleInputReader implements InputReader {
 
     @Override
     public char readChar() throws IOException {
-        return 0;
+        return (char) reader.read();
+    }
+
+    public void close() throws IOException {
+        if (reader != null) {
+            reader.close();
+        }
     }
 }
