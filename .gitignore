@@ -23,4 +23,4 @@ dependency-reduced-pom.xml
 *.log
 hs_err_pid*
 
-src/
+/src/main/java/backend/academy/Draft/
