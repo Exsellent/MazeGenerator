@@ -21,7 +21,8 @@ public class Coordinate {
     }
 
     // Переопределенный метод equals для сравнения координат
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         // Проверяем, если объекты одинаковы (сравниваем ссылки)
         if (this == o) {
             return true;
@@ -35,8 +36,9 @@ public class Coordinate {
         return row == that.row && col == that.col;
     }
 
-    // Переопределенный метод hashCode для использования в структурах данных (например, HashMap)
-    @Override public int hashCode() {
+    // Переопределенный метод hashCode для использования в структурах данных
+    @Override
+    public int hashCode() {
         // Генерация хэш-кода на основе строки и столбца
         return 31 * row + col;
     }
