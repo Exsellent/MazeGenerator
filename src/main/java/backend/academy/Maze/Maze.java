@@ -10,6 +10,19 @@ public class Maze {
     private Coordinate entrance;
     private Coordinate exit;
 
+    public Maze(int height, int width) {
+        this.height = height;
+        this.width = width;
+        this.cells = new Cell[height][width];
+
+        // Инициализация ячеек как стен по умолчанию
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                this.cells[row][col] = new Cell(row, col, Cell.CellType.WALL);
+            }
+        }
+    }
+
     public Maze(int height, int width, Cell[][] cells) {
         this.height = height;
         this.width = width;
@@ -26,6 +39,10 @@ public class Maze {
 
     public Cell getCell(int row, int col) {
         return cells[row][col];
+    }
+
+    public Cell[][] getCells() {
+        return cells;
     }
 
     public Coordinate getEntrance() {

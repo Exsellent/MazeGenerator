@@ -12,7 +12,7 @@ public class AStarSolver implements Solver {
 
     // Массив направлений для передвижения по лабиринту (вниз, вверх, влево, вправо)
     private static final int[][] DIRECTIONS = // CHECKSTYLE:OFF
-            {{1, 0}, {-1, 0}, {0, -1}, {0, 1}}; // CHECKSTYLE:ON
+            { { 1, 0 }, { -1, 0 }, { 0, -1 }, { 0, 1 } }; // CHECKSTYLE:ON
 
     // Константы стоимости передвижения по разным типам поверхностей
     private static final double SWAMP_COST = 5.0; // Стоимость передвижения по болоту

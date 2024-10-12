@@ -61,18 +61,19 @@ public class PrimGenerator implements Generator {
         }
     }
 
+    @SuppressWarnings("all") // Ложно-положительные срабатывания Checkstyle
     // Метод добавления фронтиров
     private void addFrontiers(Cell[][] grid, int row, int col, List<int[]> frontiers) {
         for (int[] dir : MazeConfig.DIRECTIONS) {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
             if (isValidCell(grid, newRow, newCol) && grid[newRow][newCol].getType() == Cell.CellType.WALL) {
-                frontiers.add(new int[] // CHECKSTYLE:OFF
-                {newRow, newCol}); // CHECKSTYLE:ON
+                frontiers.add(new int[] { newRow, newCol });
             }
         }
     }
 
+    @SuppressWarnings("all") // Ложно-положительные срабатывания Checkstyle
     // Метод получения соседей-проходов
     private List<int[]> getPassageNeighbors(Cell[][] grid, int row, int col) {
         List<int[]> neighbors = new ArrayList<>();
@@ -80,8 +81,7 @@ public class PrimGenerator implements Generator {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
             if (isValidCell(grid, newRow, newCol) && grid[newRow][newCol].getType() == Cell.CellType.PASSAGE) {
-                neighbors.add(new int[] // CHECKSTYLE:OFF
-                { newRow, newCol }); // CHECKSTYLE:ON
+                neighbors.add(new int[] { newRow, newCol });
             }
         }
         return neighbors;
@@ -104,18 +104,12 @@ public class PrimGenerator implements Generator {
             if (grid[row][col].getType() == Cell.CellType.PASSAGE) {
                 int cellType = random.nextInt(MazeConfig.SPECIAL_CELL_TYPES);
                 switch (cellType) {
-                case 0:
-                    grid[row][col].setType(Cell.CellType.SWAMP);
-                    break;
-                case 1:
-                    grid[row][col].setType(Cell.CellType.SAND);
-                    break;
-                case 2:
-                    grid[row][col].setType(Cell.CellType.COIN);
-                    break;
-                default:
+                case 0 -> grid[row][col].setType(Cell.CellType.SWAMP);
+                case 1 -> grid[row][col].setType(Cell.CellType.SAND);
+                case 2 -> grid[row][col].setType(Cell.CellType.COIN);
+                default -> {
                     // оставляем как PASSAGE
-                    break;
+                }
                 }
             }
         }

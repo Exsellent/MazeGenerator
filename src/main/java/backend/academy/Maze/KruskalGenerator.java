@@ -5,32 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Maze generator использует Kruskal's алгоритм.
- */
 public class KruskalGenerator implements Generator {
     private final Random random = new Random();
 
     @Override
     public Maze generate(int height, int width) {
-        // Валидация входных данных
-        if (height <= 0 || width <= 0) {
-            throw new IllegalArgumentException("Height and width must be positive integers.");
-        }
-
         int gridHeight = height * 2 + 1;
         int gridWidth = width * 2 + 1;
         Cell[][] grid = new Cell[gridHeight][gridWidth];
         List<Edge> edges = new ArrayList<>();
         DisjointSet disjointSet = new DisjointSet(height * width);
 
-        // Инициализация сетки и ребер
         initializeGrid(grid, gridHeight, gridWidth, edges);
-
-        // Перемешиваем рёбра случайным образом
         Collections.shuffle(edges, random);
 
-        // Алгоритм Краскала: объединение клеток
         for (Edge edge : edges) {
             int index1 = (edge.row1 / 2) * width + (edge.col1 / 2);
             int index2 = (edge.row2 / 2) * width + (edge.col2 / 2);
@@ -40,43 +28,28 @@ public class KruskalGenerator implements Generator {
                 int middleRow = (edge.row1 + edge.row2) / 2;
                 int middleCol = (edge.col1 + edge.col2) / 2;
                 grid[middleRow][middleCol].setType(Cell.CellType.PASSAGE);
+                grid[edge.row1][edge.col1].setType(Cell.CellType.PASSAGE);
+                grid[edge.row2][edge.col2].setType(Cell.CellType.PASSAGE);
             }
         }
 
-        // Обеспечиваем проходимость начальной и конечной точек
         grid[1][1].setType(Cell.CellType.PASSAGE);
         grid[gridHeight - 2][gridWidth - 2].setType(Cell.CellType.PASSAGE);
 
-        // Добавление специальных поверхностей
-        addSpecialSurfaces(grid);
+        MazeConfig.addSpecialSurfaces(grid, random);
 
         return new Maze(gridHeight, gridWidth, grid);
     }
 
-    /**
-     * Инициализирует сетку и создает стены и проходы.
-     *
-     * @param grid
-     *            The maze grid
-     * @param gridHeight
-     *            The grid height
-     * @param gridWidth
-     *            The grid width
-     * @param edges
-     *            List of edges for Kruskal's algorithm
-     */
     private void initializeGrid(Cell[][] grid, int gridHeight, int gridWidth, List<Edge> edges) {
-        // Инициализация сетки: все клетки - стены
         for (int row = 0; row < gridHeight; row++) {
             for (int col = 0; col < gridWidth; col++) {
                 grid[row][col] = new Cell(row, col, Cell.CellType.WALL);
             }
         }
 
-        // Создаем проходы и добавляем рёбра
-        for (int row = 1; row < gridHeight; row += 2) {
-            for (int col = 1; col < gridWidth; col += 2) {
-                grid[row][col].setType(Cell.CellType.PASSAGE);
+        for (int row = 1; row < gridHeight - 1; row += 2) {
+            for (int col = 1; col < gridWidth - 1; col += 2) {
                 if (row < gridHeight - 2) {
                     edges.add(new Edge(row, col, row + 2, col));
                 }
@@ -87,37 +60,6 @@ public class KruskalGenerator implements Generator {
         }
     }
 
-    /**
-     * Добавляет специальные поверхности к сетке лабиринта.
-     *
-     * @param grid
-     *            The maze grid
-     */
-    private void addSpecialSurfaces(Cell[][] grid) {
-        int totalCells = grid.length * grid[0].length;
-        int specialCells = totalCells / MazeConfig.SPECIAL_CELL_RATIO;
-
-        for (int i = 0; i < specialCells; i++) {
-            int row = random.nextInt(grid.length);
-            int col = random.nextInt(grid[0].length);
-
-            if (grid[row][col].getType() == Cell.CellType.PASSAGE) {
-                int cellType = random.nextInt(MazeConfig.SPECIAL_CELL_TYPES);
-                switch (cellType) {
-                case 0 -> grid[row][col].setType(Cell.CellType.SWAMP);
-                case 1 -> grid[row][col].setType(Cell.CellType.SAND);
-                case 2 -> grid[row][col].setType(Cell.CellType.COIN);
-                default -> {
-                    // оставляем как PASSAGE
-                }
-                }
-            }
-        }
-    }
-
-    /**
-     * Представляет собой преимущество в Kruskal's алгоритме.
-     */
     private static class Edge {
         private final int row1;
         private final int col1;

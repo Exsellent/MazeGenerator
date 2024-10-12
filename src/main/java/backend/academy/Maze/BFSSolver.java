@@ -27,7 +27,7 @@ public class BFSSolver implements Solver {
         visited[start.getRow()][start.getCol()] = true;
 
         // CHECKSTYLE:OFF
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1} // Вверх, вниз, влево, вправо
+        int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } // Вверх, вниз, влево, вправо
         }; // CHECKSTYLE:ON
 
         // Основной цикл обхода в ширину
