@@ -1,9 +1,7 @@
 package backend.academy.Maze;
 
-import backend.academy.Maze.algorithms.AldousBroderMazeGenerator;
-import backend.academy.Maze.algorithms.KruskalGenerator;
-import backend.academy.Maze.algorithms.PrimGenerator;
 import backend.academy.Maze.interfaces.Generator;
+import backend.academy.Maze.interfaces.MazeGeneratorFactory;
 import backend.academy.Maze.interfaces.Solver;
 import backend.academy.Maze.solvers.AStarSolver;
 import backend.academy.Maze.solvers.BFSSolver;
@@ -85,12 +83,11 @@ public class GameLauncher {
                 .writeLine(PROMPT_CHOICE_START + MIN_GENERATOR_CHOICE + "-" + MAX_GENERATOR_CHOICE + PROMPT_CHOICE_END);
         int choice = scanner.nextInt();
 
-        return switch (choice) {
-        case PRIM_ALGORITHM -> new PrimGenerator();
-        case KRUSKAL_ALGORITHM -> new KruskalGenerator();
-        case ALDOUS_BRODER_ALGORITHM -> new AldousBroderMazeGenerator();
-        default -> throw new IllegalArgumentException(ERROR_INVALID_CHOICE + choice);
-        };
+        if (choice < MIN_GENERATOR_CHOICE || choice > MAX_GENERATOR_CHOICE) {
+            throw new IllegalArgumentException(ERROR_INVALID_CHOICE + choice);
+        }
+
+        return MazeGeneratorFactory.createGenerator(choice);
     }
 
     private Solver selectSolverAlgorithm() {

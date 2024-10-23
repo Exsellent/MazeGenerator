@@ -7,9 +7,10 @@ import backend.academy.Maze.utils.Cell;
 import java.util.Random;
 
 /**
- * Класс AldousBroderMazeGenerator реализует алгоритм генерации лабиринтов на основе алгоритма Алдуса-Бродера.
- * Этот алгоритм случайным образом перемещается по сетке, пока не посетит все клетки, соединяя непосещённые
- * клетки с  проходами. */
+ * Класс AldousBroderMazeGenerator реализует алгоритм генерации лабиринтов на основе алгоритма Алдуса-Бродера. Этот
+ * алгоритм случайным образом перемещается по сетке, пока не посетит все клетки, соединяя непосещённые клетки с
+ * проходами.
+ */
 public class AldousBroderMazeGenerator implements Generator {
     private final Random random = new Random();
 

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Класс KruskalGenerator реализует алгоритм генерации лабиринтов на основе алгоритма Краскала.
- * Использует структуру данных DisjointSet для предотвращения создания циклов.
+ * Класс KruskalGenerator реализует алгоритм генерации лабиринтов на основе алгоритма Краскала. Использует структуру
+ * данных DisjointSet для предотвращения создания циклов.
  */
 public class KruskalGenerator implements Generator {
     private final Random random = new Random();

@@ -29,9 +29,9 @@ class PrimGeneratorTest {
     }
 
     private boolean validateMaze(Maze maze) {
-        return maze.getHeight() == 21 && maze.getWidth() == 21 &&
-            maze.getCell(1, 1).getType() == Cell.CellType.PASSAGE &&
-            maze.getCell(19, 19).getType() == Cell.CellType.PASSAGE && isConnected(maze) && hasSpecialSurfaces(maze);
+        return maze.getHeight() == 21 && maze.getWidth() == 21 && maze.getCell(1, 1).getType() == Cell.CellType.PASSAGE
+                && maze.getCell(19, 19).getType() == Cell.CellType.PASSAGE && isConnected(maze)
+                && hasSpecialSurfaces(maze);
     }
 
     private boolean isConnected(Maze maze) {

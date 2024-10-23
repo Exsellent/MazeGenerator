@@ -181,15 +181,13 @@
 
             <!-- SpotBugs Plugin for Static Code Analysis -->
             <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>4.7.3.0</version>
+            <configuration>
+                <skip>true</skip>
+            </configuration>
+        </plugin>
 
             <!-- Modernizer Plugin -->
             <plugin>
