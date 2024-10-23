@@ -1,40 +1,40 @@
 package backend.academy.maze;
 
-import backend.academy.Maze.AStarSolver;
-import backend.academy.Maze.Cell;
-import backend.academy.Maze.Coordinate;
 import backend.academy.Maze.Maze;
-import backend.academy.Maze.Solver;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import backend.academy.Maze.interfaces.Solver;
+import backend.academy.Maze.solvers.AStarSolver;
+import backend.academy.Maze.utils.Cell;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AStarSolverTest {
 
-    // Основной тест для проверки работы алгоритма A* на тестовом лабиринте
     @Test
     void testAStarSolver() {
-        Solver aStarSolver = new AStarSolver(); // Создаем экземпляр решателя A*
-        Maze maze = createTestMaze(); // Создаем тестовый лабиринт
-        Coordinate start = new Coordinate(1, 1); // Стартовая координата
-        Coordinate goal = new Coordinate(maze.getHeight() - 2, maze.getWidth() - 2); // Целевая координата
+        Solver aStarSolver = new AStarSolver();
+        Maze maze = createTestMaze();
+        Coordinate start = new Coordinate(1, 1);
+        Coordinate goal = new Coordinate(maze.getHeight() - 2, maze.getWidth() - 2);
 
-        List<Coordinate> path = aStarSolver.solve(maze, start, goal); // Решаем лабиринт
+        List<Coordinate> path = aStarSolver.solve(maze, start, goal);
 
-        assertFalse(path.isEmpty()); // Проверяем, что найденный путь не пуст
-        assertEquals(start, path.get(0)); // Проверяем, что путь начинается с начальной точки
-        assertEquals(goal, path.get(path.size() - 1)); // Проверяем, что путь заканчивается в целевой точке
-        assertNoWallsInPath(maze, path); // Проверяем, что в пути нет стен
-        assertContinuousPath(path); // Проверяем, что путь непрерывный (соседние клетки)
+        assertFalse(path.isEmpty());
+        assertEquals(start, path.get(0));
+        assertEquals(goal, path.get(path.size() - 1));
+        assertNoWallsInPath(maze, path);
+        assertContinuousPath(path);
     }
 
-    // Метод для создания тестового лабиринта 7x7
     private Maze createTestMaze() {
         int height = 7;
         int width = 7;
         Cell[][] cells = new Cell[height][width];
 
-        // Заполняем лабиринт клетками типа "проход"
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 cells[row][col] = new Cell(row, col, Cell.CellType.PASSAGE);
@@ -52,14 +52,14 @@ class AStarSolverTest {
         }
 
         // Устанавливаем несколько внутренних стен и специальные поверхности
-        cells[2][2].setType(Cell.CellType.WALL); // Внутренние стены
+        cells[2][2].setType(Cell.CellType.WALL);
         cells[2][3].setType(Cell.CellType.WALL);
         cells[3][2].setType(Cell.CellType.WALL);
-        cells[3][3].setType(Cell.CellType.SWAMP); // Болото
-        cells[4][4].setType(Cell.CellType.SAND); // Песок
-        cells[5][5].setType(Cell.CellType.COIN); // Монета
+        cells[3][3].setType(Cell.CellType.SWAMP);
+        cells[4][4].setType(Cell.CellType.SAND);
+        cells[5][5].setType(Cell.CellType.COIN);
 
-        return new Maze(height, width, cells); // Возвращаем созданный лабиринт
+        return new Maze(height, width, cells);
     }
 
     // Проверяем, что на пути нет стен
@@ -80,6 +80,6 @@ class AStarSolverTest {
     private boolean areAdjacent(Coordinate c1, Coordinate c2) {
         int rowDiff = Math.abs(c1.getRow() - c2.getRow());
         int colDiff = Math.abs(c1.getCol() - c2.getCol());
-        return (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1); // Соседние по строке или колонке
+        return (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1);
     }
 }

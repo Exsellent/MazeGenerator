@@ -1,5 +1,7 @@
-package backend.academy.Maze;
+package backend.academy.Maze.interfaces;
 
+import backend.academy.Maze.Maze;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.List;
 
 public interface Renderer {

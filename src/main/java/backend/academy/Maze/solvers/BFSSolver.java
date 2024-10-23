@@ -1,5 +1,9 @@
-package backend.academy.Maze;
+package backend.academy.Maze.solvers;
 
+import backend.academy.Maze.Maze;
+import backend.academy.Maze.interfaces.Solver;
+import backend.academy.Maze.utils.Cell;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,10 +19,11 @@ public class BFSSolver implements Solver {
         int height = maze.getHeight();
         int width = maze.getWidth();
 
-        // Матрица для отслеживания посещённых клеток
         boolean[][] visited = new boolean[height][width];
+
         // Словарь для хранения пути (откуда пришли в каждую клетку)
         Map<Coordinate, Coordinate> cameFrom = new HashMap<>();
+
         // Очередь для обработки клеток в порядке BFS
         Queue<Coordinate> queue = new LinkedList<>();
 
@@ -27,10 +32,9 @@ public class BFSSolver implements Solver {
         visited[start.getRow()][start.getCol()] = true;
 
         // CHECKSTYLE:OFF
-        int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } // Вверх, вниз, влево, вправо
-        }; // CHECKSTYLE:ON
+        int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } }; // CHECKSTYLE:ON
 
-        // Основной цикл обхода в ширину
+        // обход в ширину
         while (!queue.isEmpty()) {
             Coordinate current = queue.poll();
 
@@ -39,7 +43,7 @@ public class BFSSolver implements Solver {
                 return reconstructPath(cameFrom, goal);
             }
 
-            // Проходим по всем возможным направлениям (вверх, вниз, влево, вправо)
+            // Проходим по всем возможным направлениям
             for (int[] direction : directions) {
                 int newRow = current.getRow() + direction[0];
                 int newCol = current.getCol() + direction[1];
@@ -50,15 +54,14 @@ public class BFSSolver implements Solver {
 
                     // Если клетка ещё не была посещена
                     if (!visited[newRow][newCol]) {
-                        queue.add(neighbor); // Добавляем в очередь
-                        visited[newRow][newCol] = true; // Отмечаем как посещённую
+                        queue.add(neighbor);
+                        visited[newRow][newCol] = true;
                         cameFrom.put(neighbor, current); // Запоминаем путь
                     }
                 }
             }
         }
 
-        // Если путь не найден, возвращаем пустой список
         return Collections.emptyList();
     }
 
@@ -67,7 +70,6 @@ public class BFSSolver implements Solver {
         List<Coordinate> path = new ArrayList<>();
         Coordinate current = goal;
 
-        // Восстанавливаем путь, следуя по цепочке пришедших координат
         while (cameFrom.containsKey(current)) {
             path.add(current);
             current = cameFrom.get(current);

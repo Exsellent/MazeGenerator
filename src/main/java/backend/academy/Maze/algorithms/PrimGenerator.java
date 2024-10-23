@@ -1,5 +1,9 @@
-package backend.academy.Maze;
+package backend.academy.Maze.algorithms;
 
+import backend.academy.Maze.Maze;
+import backend.academy.Maze.config.MazeConfig;
+import backend.academy.Maze.interfaces.Generator;
+import backend.academy.Maze.utils.Cell;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,25 +20,36 @@ public class PrimGenerator implements Generator {
     public Maze generate(int height, int width) {
         int gridHeight = height * 2 + 1;
         int gridWidth = width * 2 + 1;
-        Cell[][] grid = new Cell[gridHeight][gridWidth];
+        Cell[][] grid = initializeGrid(gridHeight, gridWidth);
 
-        // Инициализация сетки
+        int startRow = random.nextInt(height) * STEP_SIZE + 1;
+        int startCol = random.nextInt(width) * STEP_SIZE + 1;
+        grid[startRow][startCol].setType(Cell.CellType.PASSAGE);
+
+        List<int[]> frontiers = new ArrayList<>();
+        addFrontiers(grid, startRow, startCol, frontiers);
+
+        generateMaze(grid, frontiers);
+
+        MazeConfig.addSpecialSurfaces(grid, random);
+
+        grid[1][1].setType(Cell.CellType.PASSAGE);
+        grid[gridHeight - STEP_SIZE][gridWidth - STEP_SIZE].setType(Cell.CellType.PASSAGE);
+
+        return new Maze(gridHeight, gridWidth, grid);
+    }
+
+    private Cell[][] initializeGrid(int gridHeight, int gridWidth) {
+        Cell[][] grid = new Cell[gridHeight][gridWidth];
         for (int row = 0; row < gridHeight; row++) {
             for (int col = 0; col < gridWidth; col++) {
                 grid[row][col] = new Cell(row, col, Cell.CellType.WALL);
             }
         }
+        return grid;
+    }
 
-        // Выбор случайной стартовой точки
-        int startRow = random.nextInt(height) * STEP_SIZE + 1;
-        int startCol = random.nextInt(width) * STEP_SIZE + 1;
-        grid[startRow][startCol].setType(Cell.CellType.PASSAGE);
-
-        // Создание списка фронтиров
-        List<int[]> frontiers = new ArrayList<>();
-        addFrontiers(grid, startRow, startCol, frontiers);
-
-        // Основной цикл генерации лабиринта
+    private void generateMaze(Cell[][] grid, List<int[]> frontiers) {
         while (!frontiers.isEmpty()) {
             int[] frontier = frontiers.remove(random.nextInt(frontiers.size()));
             int row = frontier[0];
@@ -52,54 +67,23 @@ public class PrimGenerator implements Generator {
                 addFrontiers(grid, row, col, frontiers);
             }
         }
-
-        // Добавление специальных поверхностей
-        MazeConfig.addSpecialSurfaces(grid, random);
-
-        // Убедимся, что начало и конец - проходы
-        grid[1][1].setType(Cell.CellType.PASSAGE);
-        grid[gridHeight - STEP_SIZE][gridWidth - STEP_SIZE].setType(Cell.CellType.PASSAGE);
-
-        return new Maze(gridHeight, gridWidth, grid);
     }
 
-    /**
-     * Добавляет соседние клетки к списку фронтиров, если они могут быть потенциальными проходами.
-     *
-     * @param grid
-     *            Сетка клеток лабиринта
-     * @param row
-     *            Текущая строка клетки
-     * @param col
-     *            Текущий столбец клетки
-     * @param frontiers
-     *            Список фронтиров
-     */
     @SuppressWarnings("checkstyle:NoWhitespaceAfter")
+
     private void addFrontiers(Cell[][] grid, int row, int col, List<int[]> frontiers) {
         int[][] directions = { { -STEP_SIZE, 0 }, { STEP_SIZE, 0 }, { 0, -STEP_SIZE }, { 0, STEP_SIZE } };
         for (int[] dir : directions) {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
             if (isValidCell(grid, newRow, newCol) && grid[newRow][newCol].getType() == Cell.CellType.WALL) {
-                frontiers.add(new int[] {newRow, newCol});
+                frontiers.add(new int[] { newRow, newCol });
             }
         }
     }
 
-    /**
-     * Возвращает список соседей, которые являются проходами, для данной клетки.
-     *
-     * @param grid
-     *            Сетка клеток лабиринта
-     * @param row
-     *            Текущая строка клетки
-     * @param col
-     *            Текущий столбец клетки
-     *
-     * @return Список соседних клеток, являющихся проходами
-     */
     @SuppressWarnings("checkstyle:NoWhitespaceAfter")
+
     private List<int[]> getPassageNeighbors(Cell[][] grid, int row, int col) {
         List<int[]> neighbors = new ArrayList<>();
         int[][] directions = { { -STEP_SIZE, 0 }, { STEP_SIZE, 0 }, { 0, -STEP_SIZE }, { 0, STEP_SIZE } };
@@ -113,18 +97,6 @@ public class PrimGenerator implements Generator {
         return neighbors;
     }
 
-    /**
-     * Проверяет, является ли данная клетка допустимой внутри границ сетки.
-     *
-     * @param grid
-     *            Сетка клеток лабиринта
-     * @param row
-     *            Проверяемая строка клетки
-     * @param col
-     *            Проверяемый столбец клетки
-     *
-     * @return true, если клетка находится в пределах допустимых координат, иначе false
-     */
     private boolean isValidCell(Cell[][] grid, int row, int col) {
         return row > 0 && col > 0 && row < grid.length - 1 && col < grid[0].length - 1;
     }

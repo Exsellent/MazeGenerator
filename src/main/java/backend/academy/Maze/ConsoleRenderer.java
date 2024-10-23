@@ -1,5 +1,8 @@
 package backend.academy.Maze;
 
+import backend.academy.Maze.interfaces.Renderer;
+import backend.academy.Maze.utils.Cell;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +10,6 @@ import org.slf4j.LoggerFactory;
 public class ConsoleRenderer implements Renderer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleRenderer.class);
 
-    // ANSI escape codes для цветов
     private static final String RESET = "\u001B[0m";
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[32m";
@@ -38,12 +40,12 @@ public class ConsoleRenderer implements Renderer {
             for (int col = 0; col < width; col++) {
                 Coordinate current = new Coordinate(row, col);
                 if (maze.getEntrance().equals(current)) {
-                    sb.append(GREEN).append(ENTRY).append(RESET); // Вход - зеленый
+                    sb.append(GREEN).append(ENTRY).append(RESET);
                 } else if (maze.getExit().equals(current)) {
-                    sb.append(PURPLE).append(EXIT).append(RESET); // Выход - фиолетовый
+                    sb.append(PURPLE).append(EXIT).append(RESET);
                 } else if (path != null && path.contains(current)
                         && maze.getCell(row, col).getType() != Cell.CellType.WALL) {
-                    sb.append(YELLOW).append(PATH).append(RESET); // Путь - желтый
+                    sb.append(YELLOW).append(PATH).append(RESET);
                 } else {
                     sb.append(getColoredSymbolForCell(maze.getCell(row, col)));
                 }
@@ -58,11 +60,11 @@ public class ConsoleRenderer implements Renderer {
 
     private String getColoredSymbolForCell(Cell cell) {
         return switch (cell.getType()) {
-        case WALL -> BLUE + WALL + RESET; // Стены - синие
+        case WALL -> BLUE + WALL + RESET;
         case PASSAGE -> PASSAGE + "";
-        case SWAMP -> GREEN + SWAMP + RESET; // Болото - зеленый
-        case SAND -> YELLOW + SAND + RESET; // Песок - желтый
-        case COIN -> RED + COIN + RESET; // Монета - красный
+        case SWAMP -> GREEN + SWAMP + RESET;
+        case SAND -> YELLOW + SAND + RESET;
+        case COIN -> RED + COIN + RESET;
         default -> PASSAGE + "";
         };
     }

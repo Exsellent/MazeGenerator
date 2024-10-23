@@ -1,4 +1,4 @@
-package backend.academy.Maze;
+package backend.academy.Maze.interfaces;
 
 public interface OutputWriter {
 

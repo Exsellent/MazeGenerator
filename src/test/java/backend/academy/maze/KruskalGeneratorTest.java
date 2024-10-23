@@ -1,25 +1,24 @@
 package backend.academy.maze;
 
-import backend.academy.Maze.Cell;
-import backend.academy.Maze.Generator;
-import backend.academy.Maze.KruskalGenerator;
 import backend.academy.Maze.Maze;
+import backend.academy.Maze.algorithms.KruskalGenerator;
+import backend.academy.Maze.interfaces.Generator;
+import backend.academy.Maze.utils.Cell;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class KruskalGeneratorTest {
-    private static final int MAX_ATTEMPTS = 100; // Максимальное количество попыток для генерации валидного лабиринта
+    private static final int MAX_ATTEMPTS = 100;
 
     @Test
     void testKruskalGenerator() {
         Generator kruskalGenerator = new KruskalGenerator();
         boolean testPassed = false;
 
-        // Пытаемся создать валидный лабиринт за MAX_ATTEMPTS попыток
         for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
             Maze maze = kruskalGenerator.generate(10, 10);
             if (validateMaze(maze)) {
-                testPassed = true; // Лабиринт успешно прошел проверку
+                testPassed = true;
                 break;
             }
         }
@@ -28,7 +27,6 @@ class KruskalGeneratorTest {
         assertTrue(testPassed, "Kruskal generator failed to create a valid maze after " + MAX_ATTEMPTS + " attempts");
     }
 
-    // Проверка валидности сгенерированного лабиринта
     private boolean validateMaze(Maze maze) {
         return maze.getHeight() == 21 && maze.getWidth() == 21 && maze.getCell(1, 1).getType() == Cell.CellType.PASSAGE
                 && maze.getCell(maze.getHeight() - 2, maze.getWidth() - 2).getType() == Cell.CellType.PASSAGE
@@ -38,9 +36,8 @@ class KruskalGeneratorTest {
     // Проверка, что лабиринт связан, то есть можно добраться до всех проходов
     private boolean isConnected(Maze maze) {
         boolean[][] visited = new boolean[maze.getHeight()][maze.getWidth()];
-        dfs(maze, 1, 1, visited); // Начинаем обход с первой доступной клетки
+        dfs(maze, 1, 1, visited);
 
-        // Проверяем, что все проходы доступны
         for (int row = 1; row < maze.getHeight() - 1; row += 2) {
             for (int col = 1; col < maze.getWidth() - 1; col += 2) {
                 if (maze.getCell(row, col).getType() == Cell.CellType.PASSAGE && !visited[row][col]) {
@@ -55,38 +52,39 @@ class KruskalGeneratorTest {
     private void dfs(Maze maze, int row, int col, boolean[][] visited) {
         if (row <= 0 || col <= 0 || row >= maze.getHeight() - 1 || col >= maze.getWidth() - 1 || visited[row][col]
                 || maze.getCell(row, col).getType() == Cell.CellType.WALL) {
-            return; // Выход, если достигли границы, уже посетили или наткнулись на стену
+            return;
         }
 
-        visited[row][col] = true; // Отмечаем клетку как посещенную
+        visited[row][col] = true;
 
-        // Рекурсивно обходим все соседние клетки
         dfs(maze, row + 1, col, visited);
         dfs(maze, row - 1, col, visited);
         dfs(maze, row, col + 1, visited);
         dfs(maze, row, col - 1, visited);
     }
 
-    // Проверка наличия специальных поверхностей в лабиринте (болота, песок, монеты)
+    // Проверка наличия специальных поверхностей в лабиринте
     private boolean hasSpecialSurfaces(Maze maze) {
         boolean hasSwamp = false, hasSand = false, hasCoin = false;
 
-        // Перебираем все клетки лабиринта и проверяем их типы
         for (int row = 0; row < maze.getHeight(); row++) {
             for (int col = 0; col < maze.getWidth(); col++) {
                 Cell.CellType cellType = maze.getCell(row, col).getType();
-                if (cellType == Cell.CellType.SWAMP)
-                    hasSwamp = true; // Обнаружена клетка типа "болото"
-                if (cellType == Cell.CellType.SAND)
-                    hasSand = true; // Обнаружена клетка типа "песок"
-                if (cellType == Cell.CellType.COIN)
-                    hasCoin = true; // Обнаружена клетка типа "монета"
+                if (cellType == Cell.CellType.SWAMP) {
+                    hasSwamp = true;
+                }
+                if (cellType == Cell.CellType.SAND) {
+                    hasSand = true;
+                }
+                if (cellType == Cell.CellType.COIN) {
+                    hasCoin = true;
+                }
 
-                // Если все три типа найдены, возвращаем true
+                // Если все три типа найдены
                 if (hasSwamp && hasSand && hasCoin)
                     return true;
             }
         }
-        return false; // Если хотя бы один из типов не найден, возвращаем false
+        return false; // Если хотя бы один из типов не найден
     }
 }

@@ -1,124 +1,109 @@
 package backend.academy.Maze;
 
+import backend.academy.Maze.algorithms.AldousBroderMazeGenerator;
+import backend.academy.Maze.algorithms.KruskalGenerator;
+import backend.academy.Maze.algorithms.PrimGenerator;
+import backend.academy.Maze.interfaces.Generator;
+import backend.academy.Maze.interfaces.Solver;
+import backend.academy.Maze.solvers.AStarSolver;
+import backend.academy.Maze.solvers.BFSSolver;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.List;
 import java.util.Scanner;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class GameLauncher {
-    private static final int PRIM_GENERATOR_OPTION = 1;
-    private static final int KRUSKAL_GENERATOR_OPTION = 2;
-    private static final int ALDOUS_BRODER_GENERATOR_OPTION = 3;
+    private static final int PRIM_ALGORITHM = 1;
+    private static final int KRUSKAL_ALGORITHM = 2;
+    private static final int ALDOUS_BRODER_ALGORITHM = 3;
+    private static final int MIN_GENERATOR_CHOICE = 1;
+    private static final int MAX_GENERATOR_CHOICE = 3;
 
-    private final Generator primGenerator;
-    private final Generator kruskalGenerator;
-    private final Generator aldousBroderGenerator;
-    private final Solver solver;
-    private final Renderer renderer;
-    private final OutputWriter outputWriter;
+    private static final int ASTAR_ALGORITHM = 1;
+    private static final int BFS_ALGORITHM = 2;
+    private static final int MIN_SOLVER_CHOICE = 1;
+    private static final int MAX_SOLVER_CHOICE = 2;
+
+    private static final String PROMPT_CHOICE_START = "Enter your choice (";
+    private static final String PROMPT_CHOICE_END = "): ";
+    private static final String ERROR_INVALID_CHOICE = "Invalid choice: ";
+
+    private final ConsoleOutputWriter outputWriter;
     private final Scanner scanner;
 
     public GameLauncher() {
-        this.primGenerator = new PrimGenerator();
-        this.kruskalGenerator = new KruskalGenerator();
-        this.aldousBroderGenerator = new AldousBroderMazeGenerator();
-        this.solver = new AStarSolver();
-        this.renderer = new ConsoleRenderer();
         this.outputWriter = new ConsoleOutputWriter();
         this.scanner = new Scanner(System.in);
     }
 
-    public void launch() {
-        outputWriter.println("Welcome to the Maze Generator and Solver!");
+    public void startGame() {
+        outputWriter.writeLine("Welcome to the Maze Generator and Solver!");
+        outputWriter.writeLine("Enter the width of the maze: ");
+        int width = scanner.nextInt();
+        outputWriter.writeLine("Enter the height of the maze: ");
+        int height = scanner.nextInt();
 
-        int width = getIntInput("Enter the width of the maze: ");
-        int height = getIntInput("Enter the height of the maze: ");
+        Generator generator = selectGenerationAlgorithm();
+        outputWriter.writeLine("Enter the coordinates of the starting point (x y): ");
+        int startX = scanner.nextInt();
+        int startY = scanner.nextInt();
+        outputWriter.writeLine("Enter the coordinates of the endpoint (x y): ");
+        int endX = scanner.nextInt();
+        int endY = scanner.nextInt();
 
-        Generator selectedGenerator = selectGenerator();
-
-        Coordinate start = getCoordinateInput("Enter the coordinates of the starting point (x y): ", width, height);
-        Coordinate end = getCoordinateInput("Enter the coordinates of the endpoint (x y): ", width, height);
-
-        run(height, width, selectedGenerator, start, end);
-    }
-
-    private int getIntInput(String prompt) {
-        outputWriter.print(prompt);
-        while (!scanner.hasNextInt()) {
-            outputWriter.print("Invalid input. Please enter an integer: ");
-            scanner.next(); // Сбрасываем неправильный ввод
-        }
-        return scanner.nextInt();
-    }
-
-    private Generator selectGenerator() {
-        outputWriter.println("Select the generation algorithm:");
-        outputWriter.println(PRIM_GENERATOR_OPTION + " - Prim");
-        outputWriter.println(KRUSKAL_GENERATOR_OPTION + " - Kruskal");
-        outputWriter.println(ALDOUS_BRODER_GENERATOR_OPTION + " - Aldous-Broder");
-
-        int choice;
-        do {
-            choice = getIntInput(
-                    "Enter your choice (" + PRIM_GENERATOR_OPTION + "-" + ALDOUS_BRODER_GENERATOR_OPTION + "): ");
-        } while (choice < PRIM_GENERATOR_OPTION || choice > ALDOUS_BRODER_GENERATOR_OPTION);
-
-        switch (choice) {
-        case PRIM_GENERATOR_OPTION:
-            return primGenerator;
-        case KRUSKAL_GENERATOR_OPTION:
-            return kruskalGenerator;
-        case ALDOUS_BRODER_GENERATOR_OPTION:
-            return aldousBroderGenerator;
-        default:
-            return primGenerator; // Недостижимо
-        }
-    }
-
-    private Coordinate getCoordinateInput(String prompt, int maxX, int maxY) {
-        int x;
-        int y;
-        do {
-            outputWriter.print(prompt);
-            while (!scanner.hasNextInt()) {
-                outputWriter.print("Invalid input. Please enter two integers: ");
-                scanner.next(); // Сбрасываем неправильный ввод
-            }
-            x = scanner.nextInt();
-            y = scanner.nextInt();
-        } while (!isValidCoordinate(x, y, maxX, maxY)); // Повторяем, если координаты недействительны
-
-        return new Coordinate(x, y);
-    }
-
-    private boolean isValidCoordinate(int x, int y, int maxX, int maxY) {
-        if (x < 0 || x >= maxX || y < 0 || y >= maxY) {
-            outputWriter.println("Coordinates out of bounds. Please try again.");
-            return false;
-        }
-        return true;
-    }
-
-    private void run(int height, int width, Generator generator, Coordinate start, Coordinate end) {
-        outputWriter.println("Generating maze...");
+        outputWriter.writeLine("Generating maze...");
         Maze maze = generator.generate(height, width);
+        maze.setEntrance(new Coordinate(startX, startY));
+        maze.setExit(new Coordinate(endX, endY));
 
-        maze.setEntrance(start);
-        maze.setExit(end);
+        outputWriter.writeLine("Rendering maze...");
+        ConsoleRenderer renderer = new ConsoleRenderer();
+        String renderedMaze = renderer.render(maze);
+        outputWriter.writeLine(renderedMaze);
 
-        outputWriter.println("Rendering maze...");
-        String mazeRendering = renderer.render(maze);
-        outputWriter.println(mazeRendering);
+        Solver solver = selectSolverAlgorithm();
+        outputWriter.writeLine("Solving maze...");
 
-        outputWriter.println("Solving maze...");
-        List<Coordinate> path = solver.solve(maze, start, end);
+        List<Coordinate> path = solver.solve(maze, new Coordinate(startX, startY), new Coordinate(endX, endY));
 
-        if (path.isEmpty()) {
-            outputWriter.println("No path found.");
+        if (!path.isEmpty()) {
+            outputWriter.writeLine("Path found. Rendering solution...");
+            String solvedMaze = renderer.render(maze, path);
+            outputWriter.writeLine(solvedMaze);
         } else {
-            outputWriter.println("Path found. Rendering solution...");
-            String solvedMazeRendering = renderer.render(maze, path);
-            outputWriter.println(solvedMazeRendering);
+            outputWriter.writeLine("No path found.");
         }
+
+        outputWriter.writeLine("Game finished");
+    }
+
+    private Generator selectGenerationAlgorithm() {
+        outputWriter.writeLine("Select the generation algorithm:");
+        outputWriter.writeLine(PRIM_ALGORITHM + " - Prim");
+        outputWriter.writeLine(KRUSKAL_ALGORITHM + " - Kruskal");
+        outputWriter.writeLine(ALDOUS_BRODER_ALGORITHM + " - Aldous-Broder");
+        outputWriter
+                .writeLine(PROMPT_CHOICE_START + MIN_GENERATOR_CHOICE + "-" + MAX_GENERATOR_CHOICE + PROMPT_CHOICE_END);
+        int choice = scanner.nextInt();
+
+        return switch (choice) {
+        case PRIM_ALGORITHM -> new PrimGenerator();
+        case KRUSKAL_ALGORITHM -> new KruskalGenerator();
+        case ALDOUS_BRODER_ALGORITHM -> new AldousBroderMazeGenerator();
+        default -> throw new IllegalArgumentException(ERROR_INVALID_CHOICE + choice);
+        };
+    }
+
+    private Solver selectSolverAlgorithm() {
+        outputWriter.writeLine("Select the solving algorithm:");
+        outputWriter.writeLine(ASTAR_ALGORITHM + " - A* (A-Star)");
+        outputWriter.writeLine(BFS_ALGORITHM + " - BFS (Breadth-First Search)");
+        outputWriter.writeLine(PROMPT_CHOICE_START + MIN_SOLVER_CHOICE + "-" + MAX_SOLVER_CHOICE + PROMPT_CHOICE_END);
+        int choice = scanner.nextInt();
+
+        return switch (choice) {
+        case ASTAR_ALGORITHM -> new AStarSolver();
+        case BFS_ALGORITHM -> new BFSSolver();
+        default -> throw new IllegalArgumentException(ERROR_INVALID_CHOICE + choice);
+        };
     }
 }

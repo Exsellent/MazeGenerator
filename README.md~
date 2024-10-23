@@ -40,7 +40,7 @@
 ## Структура проекта:
 Проект имеет следующую структуру:
 ```
-backend_academy_2024_project_2-java-Exsellent/
+backend_academy_2024_project_2-java-Excellent/
 │
 ├── src/
 │   ├── main/
@@ -48,32 +48,38 @@ backend_academy_2024_project_2-java-Exsellent/
 │   │       └── backend/
 │   │           └── academy/
 │   │               └── Maze/
-│   │                   ├── algorithms/
-│   │                   │   ├── AldousBroderMazeGenerator.java
-│   │                   │   ├── KruskalGenerator.java
-│   │                   │   └── PrimGenerator.java
-│   │                   ├── config/
-│   │                   │   └── MazeConfig.java
-│   │                   ├── interfaces/
-│   │                   │   ├── Generator.java
-│   │                   │   ├── MazeGenerator.java
-│   │                   │   ├── OutputWriter.java
-│   │                   │   ├── Renderer.java
-│   │                   │   └── Solver.java
-│   │                   ├── solvers/
-│   │                   │   ├── AStarSolver.java
-│   │                   │   └── BFSSolver.java
-│   │                   ├── utils/
-│   │                   │   ├── Cell.java
-│   │                   │   ├── Coordinate.java
-│   │                   │   └── DisjointSet.java
+│   │                   ├── AStarSolver.java
+│   │                   ├── AldousBroderMazeGenerator.java
+│   │                   ├── BFSSolver.java
+│   │                   ├── Cell.java
 │   │                   ├── ConsoleOutputWriter.java
-│   │                   ├── ConsoleRenderer.java
+│   │                   ├── ConsoleReader.java
+│   │                   ├── Coordinate.java
+│   │                   ├── DisjointSet.java
 │   │                   ├── GameLauncher.java
+│   │                   ├── Generator.java
+│   │                   ├── KruskalGenerator.java
 │   │                   ├── Main.java
 │   │                   ├── Maze.java
-│   │                   └── MazeApp.java
-
+│   │                   ├── MazeApp.java
+│   │                   ├── MazeConfig.java
+│   │                   ├── MazeGenerator.java
+│   │                   ├── OutputWriter.java
+│   │                   ├── PrimGenerator.java
+│   │                   ├── Renderer.java
+│   │                   └── Solver.java
+│   └── test/
+│       └── java/
+│           └── backend/
+│               └── academy/
+│                   └── Maze/
+│                       ├── AldousBroderGeneratorTests.java
+│                       ├── AStarSolverTests.java
+│                       ├── BFSSolverTests.java
+│                       ├── KruskalGeneratorTests.java
+│                       ├── PrimGeneratorTests.java
+│                       
+└── README.md
 ```
 
 ## Установка и запуск

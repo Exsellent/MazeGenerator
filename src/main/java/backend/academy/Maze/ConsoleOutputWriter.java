@@ -1,5 +1,6 @@
 package backend.academy.Maze;
 
+import backend.academy.Maze.interfaces.OutputWriter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

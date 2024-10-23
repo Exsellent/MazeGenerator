@@ -1,5 +1,8 @@
 package backend.academy.Maze;
 
+import backend.academy.Maze.config.MazeConfig;
+import backend.academy.Maze.utils.Cell;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,7 +18,6 @@ public class Maze {
         this.width = width;
         this.cells = new Cell[height][width];
 
-        // Инициализация ячеек как стен по умолчанию
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 this.cells[row][col] = new Cell(row, col, Cell.CellType.WALL);
@@ -68,13 +70,12 @@ public class Maze {
         return row >= 0 && row < height && col >= 0 && col < width && cells[row][col].getType() != Cell.CellType.WALL;
     }
 
-    // Проверка наличия валидного пути между двумя точками
     public boolean hasValidPath(Coordinate start, Coordinate end) {
         if (!isValidCoordinate(start) || !isValidCoordinate(end)) {
             return false;
         }
-        // Здесь можно использовать алгоритм поиска в ширину (BFS) для проверки наличия пути.
-        return bfs(start, end); // Используем BFS для поиска пути
+
+        return bfs(start, end);
     }
 
     private boolean bfs(Coordinate start, Coordinate end) {
@@ -87,10 +88,9 @@ public class Maze {
             Coordinate current = queue.poll();
 
             if (current.equals(end)) {
-                return true; // Путь найден
+                return true;
             }
 
-            // Проверка всех возможных направлений
             for (int[] direction : MazeConfig.DIRECTIONS) {
                 int newRow = current.getRow() + direction[0];
                 int newCol = current.getCol() + direction[1];
@@ -101,6 +101,6 @@ public class Maze {
                 }
             }
         }
-        return false; // Путь не найден
+        return false;
     }
 }

@@ -1,34 +1,35 @@
 package backend.academy.maze;
 
-import backend.academy.Maze.BFSSolver;
-import backend.academy.Maze.Cell;
-import backend.academy.Maze.Coordinate;
 import backend.academy.Maze.Maze;
-import backend.academy.Maze.Solver;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import backend.academy.Maze.interfaces.Solver;
+import backend.academy.Maze.solvers.BFSSolver;
+import backend.academy.Maze.utils.Cell;
+import backend.academy.Maze.utils.Coordinate;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BFSSolverTest {
 
-    // Основной тест для проверки работы алгоритма поиска в ширину (BFS) на тестовом лабиринте
     @Test
     void testBFSSolver() {
-        Solver bfsSolver = new BFSSolver(); // Создаем экземпляр решателя BFS
-        Maze maze = createTestMaze(); // Создаем тестовый лабиринт
-        Coordinate start = new Coordinate(1, 1); // Стартовая точка
-        Coordinate goal = new Coordinate(maze.getHeight() - 2, maze.getWidth() - 2); // Целевая точка
+        Solver bfsSolver = new BFSSolver();
+        Maze maze = createTestMaze();
+        Coordinate start = new Coordinate(1, 1);
+        Coordinate goal = new Coordinate(maze.getHeight() - 2, maze.getWidth() - 2);
 
-        List<Coordinate> path = bfsSolver.solve(maze, start, goal); // Решаем лабиринт с использованием BFS
+        List<Coordinate> path = bfsSolver.solve(maze, start, goal);
 
-        assertFalse(path.isEmpty()); // Проверяем, что путь не пуст
-        assertEquals(start, path.get(0)); // Проверяем, что путь начинается с начальной точки
-        assertEquals(goal, path.get(path.size() - 1)); // Проверяем, что путь заканчивается в целевой точке
-        assertNoWallsInPath(maze, path); // Проверяем, что в пути нет стен
-        assertContinuousPath(path); // Проверяем, что путь является непрерывным (соседние клетки)
+        assertFalse(path.isEmpty());
+        assertEquals(start, path.get(0));
+        assertEquals(goal, path.get(path.size() - 1));
+        assertNoWallsInPath(maze, path);
+        assertContinuousPath(path);
     }
 
-    // Метод для создания тестового лабиринта размером 7x7
     private Maze createTestMaze() {
         int height = 7;
         int width = 7;
@@ -51,15 +52,14 @@ class BFSSolverTest {
             cells[i][width - 1].setType(Cell.CellType.WALL);
         }
 
-        // Устанавливаем несколько внутренних стен и специальные поверхности
-        cells[2][2].setType(Cell.CellType.WALL); // Внутренние стены
+        cells[2][2].setType(Cell.CellType.WALL);
         cells[2][3].setType(Cell.CellType.WALL);
         cells[3][2].setType(Cell.CellType.WALL);
-        cells[3][3].setType(Cell.CellType.SWAMP); // Болото
-        cells[4][4].setType(Cell.CellType.SAND); // Песок
-        cells[5][5].setType(Cell.CellType.COIN); // Монета
+        cells[3][3].setType(Cell.CellType.SWAMP);
+        cells[4][4].setType(Cell.CellType.SAND);
+        cells[5][5].setType(Cell.CellType.COIN);
 
-        return new Maze(height, width, cells); // Возвращаем созданный лабиринт
+        return new Maze(height, width, cells);
     }
 
     // Проверяем, что на пути нет стен
@@ -76,10 +76,9 @@ class BFSSolverTest {
         }
     }
 
-    // Метод для проверки, что две клетки соседствуют
     private boolean areAdjacent(Coordinate c1, Coordinate c2) {
         int rowDiff = Math.abs(c1.getRow() - c2.getRow());
         int colDiff = Math.abs(c1.getCol() - c2.getCol());
-        return (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1); // Соседние по строке или колонке
+        return (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1);
     }
 }
