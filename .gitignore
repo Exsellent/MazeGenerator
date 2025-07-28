@@ -24,3 +24,7 @@ dependency-reduced-pom.xml
 hs_err_pid*
 
 /src/main/java/backend/academy/Draft/
+# Временные файлы от редакторов
+*~
+*.swp
+*.tmp
